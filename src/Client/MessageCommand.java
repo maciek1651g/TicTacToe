@@ -2,8 +2,10 @@ package Client;
 
 public enum MessageCommand {
     REQUEST_ROOMS,
-    MAKE_CHOICE,
+    ROOM_JOINED,
     WAIT_FOR_CHOICE,
     GAME_START,
-    GAME_OVER;
+    GAME_OVER,
+    GAME_INTERRUPTED,
+    INVALID_MOVE;
 }

@@ -41,7 +41,7 @@ public class ClientConnection {
     public boolean joinRoom(final String roomId) {
         this.serverOutput.println("JOIN_ROOM: " + roomId);
         try {
-            return serverInput.readLine().equals("ROOM_JOINED");
+            return serverInput.readLine().equals(MessageCommand.ROOM_JOINED.toString());
         } catch (final IOException e) {
             e.printStackTrace();
             return false;

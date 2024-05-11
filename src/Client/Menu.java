@@ -35,17 +35,47 @@ public class Menu {
     public Integer showRoomsAndSelect(String rooms) {
         System.out.println("Rooms:");
         System.out.println(rooms);
-        System.out.print("Enter room number: ");
-        return scanner.nextInt();
+
+        while (true) {
+            try {
+                System.out.print("Enter room number: ");
+                return scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please try again.");
+            }
+        }
     }
 
     public Integer makeChoiceForX() {
-        System.out.println("Make choice for X: ");
-        return scanner.nextInt();
+        // provide index of row and validate input
+        while (true) {
+            try {
+                System.out.print("Provide index of row (0, 1, 2): ");
+                var row = scanner.nextInt();
+                if (row >= 0 && row <= 2) {
+                    return row;
+                } else {
+                    throw new Exception();
+                }
+            } catch (Exception ignored) {
+                System.out.println("Invalid input. Please try again.");
+            }
+        }
     }
 
     public Integer makeChoiceForY() {
-        System.out.println("Make choice for Y: ");
-        return scanner.nextInt();
+        while (true) {
+            try {
+                System.out.print("Provide index of column (0, 1, 2): ");
+                var col = scanner.nextInt();
+                if (col >= 0 && col <= 2) {
+                    return col;
+                } else {
+                    throw new Exception();
+                }
+            } catch (Exception ignored) {
+                System.out.println("Invalid input. Please try again.");
+            }
+        }
     }
 }

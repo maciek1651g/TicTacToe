@@ -8,7 +8,7 @@ public class GameBoard {
         this.board = new Choice[3][3];
     }
 
-    public boolean containsWinner() {
+    private boolean containsWinner() {
         return containsWinner(Choice.O) || containsWinner(Choice.X);
     }
 
@@ -59,16 +59,39 @@ public class GameBoard {
         return choices[0] == choice && choices[1] == choice && choices[2] == choice;
     }
 
-    public void setOption(Choice choice, int x, int y) {
-        this.board[x][y] = choice;
+    public boolean setOption(Choice choice, int x, int y) {
+        if (board[x][y] == null) {
+            this.board[x][y] = choice;
+            return true;
+        }
+        return false;
     }
 
     public void printBoard() {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
-                System.out.print(board[row][col] + " ");
+                var mark = board[row][col] == null ? " " : board[row][col];
+                System.out.print("| " + mark + " ");
             }
-            System.out.println();
+            System.out.println("|");
+            if (row < board.length - 1) {
+                System.out.println("--------------");
+            }
         }
+    }
+
+    public boolean isBoardFull() {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (board[row][col] == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isGameOver() {
+        return containsWinner() || isBoardFull();
     }
 }

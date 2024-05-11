@@ -1,5 +1,7 @@
 package Server;
 
+import Client.MessageCommand;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +13,8 @@ public class ClientHandler implements Runnable {
     private Server server;
     private BufferedReader input;
     private PrintWriter output;
+
+    private GameRoom currRoom = null;
 
     public ClientHandler(Socket socket, Server server) throws IOException {
         this.socket = socket;
@@ -27,16 +31,23 @@ public class ClientHandler implements Runnable {
             while (true) {
                 request = input.readLine();
 
-                if(request.equals("REQUEST_ROOMS")) {
+                if(request.equals(MessageCommand.REQUEST_ROOMS.toString())) {
                     handleRoomsAndModesRequest();
                 } else if(request.startsWith("JOIN_ROOM:")) {
                     handleJoinRoomRequest(request);
+                }else if(request.startsWith("SEND_CHOICE:")) {
+                    if(currRoom != null) {
+                        currRoom.makeMove(request);
+                    }
                 } else {
-                    System.out.println("Invalid request");
+                    System.out.println("Invalid request from client.");
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+            if(currRoom != null) {
+                currRoom.leaveRoom(this);
+            }
         } finally {
             try {
                 socket.close();
@@ -57,14 +68,18 @@ public class ClientHandler implements Runnable {
 
     private void handleJoinRoomRequest(String request) {
         // JOIN_ROOM: 1
-        String[] parts = request.split(":");
-        int roomId = Integer.parseInt(parts[1].trim());
-        GameRoom room = server.getRooms()[roomId-1];
-        if(room.getPlayersCount() < 2) {
-            room.addPlayer(this);
-            output.println("ROOM_JOINED");
-        } else {
-            output.println("ROOM_FULL");
+        try {
+            String[] parts = request.split(":");
+            int roomId = Integer.parseInt(parts[1].trim());
+
+            if(roomId >= 1 & roomId <= 3) {
+                GameRoom room = server.getRooms()[roomId-1];
+                room.joinRoom(this);
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            output.println("INVALID_ROOM");
         }
     }
 
@@ -80,5 +95,9 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void setCurrRoom(GameRoom room) {
+        currRoom = room;
     }
 }
