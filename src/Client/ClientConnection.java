@@ -8,7 +8,6 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class ClientConnection {
-    final BufferedReader localConsole = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
     private final Socket socket;
     private final BufferedReader serverInput;
     private final PrintWriter serverOutput;

@@ -1,7 +1,5 @@
 package Client;
 
-// wprowadzenie litery zamiast cyfry psuje gre
-
 public class ClientActor {
 
     public static void main(String[] args) {

@@ -1,9 +1,12 @@
 package Client;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class Menu {
-    private Scanner scanner = new Scanner(System.in);
+    final BufferedReader localConsole = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 
     public Menu() {
         System.out.println("Welcome to the TicTacToe!");
@@ -12,9 +15,14 @@ public class Menu {
 
     public String init() {
         System.out.print("Enter server address [127.0.0.1]: ");
-        String serverAddress = scanner.nextLine();
+        String serverAddress = null;
+        try {
+            serverAddress = localConsole.readLine().trim();
+        } catch (IOException e) {
+            System.out.println("Invalid input. Localhost will be used.");
+        }
 
-        if(serverAddress.isEmpty()) {
+        if(serverAddress == null || serverAddress.isEmpty()) {
             return "127.0.0.1";
         }
         return serverAddress;
@@ -25,9 +33,8 @@ public class Menu {
         System.out.println("2. Exit");
         System.out.print("Enter your choice: ");
         try {
-            return scanner.nextInt();
+            return Integer.parseInt(localConsole.readLine());
         } catch (Exception e) {
-            System.out.println("Invalid input. Please try again.");
             return -1;
         }
     }
@@ -39,7 +46,7 @@ public class Menu {
         while (true) {
             try {
                 System.out.print("Enter room number: ");
-                return scanner.nextInt();
+                return Integer.parseInt(localConsole.readLine());
             } catch (Exception e) {
                 System.out.println("Invalid input. Please try again.");
             }
@@ -51,7 +58,7 @@ public class Menu {
         while (true) {
             try {
                 System.out.print("Provide index of row (0, 1, 2): ");
-                var row = scanner.nextInt();
+                var row = Integer.parseInt(localConsole.readLine());
                 if (row >= 0 && row <= 2) {
                     return row;
                 } else {
@@ -67,7 +74,7 @@ public class Menu {
         while (true) {
             try {
                 System.out.print("Provide index of column (0, 1, 2): ");
-                var col = scanner.nextInt();
+                var col = Integer.parseInt(localConsole.readLine());
                 if (col >= 0 && col <= 2) {
                     return col;
                 } else {
