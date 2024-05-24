@@ -37,7 +37,7 @@ public class GameRoom {
         return getPlayersCount() == 2;
     }
 
-    public void joinRoom(ClientHandler player) {
+    public synchronized void joinRoom(ClientHandler player) {
         if(!isFull()) {
             players.add(player);
             player.sendMessage(MessageCommand.ROOM_JOINED.toString());
